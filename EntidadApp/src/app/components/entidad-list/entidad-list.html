@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2><i class="bi bi-person-fill"></i> Lista de Personas Naturales</h2>
+
+  <button class="btn btn-primary" routerLink="/personas/nuevo">
+    <i class="bi bi-plus-circle-fill me-2"></i>
+    Nueva Persona
+    </button>
+</div>
+
+<hr>
+
+<div *ngIf="error" class="alert alert-danger">
+  <strong>¡Error!</strong> {{ error }}
+</div>
+
+<div *ngIf="!error" class="table-responsive">
+  <table class="table table-striped table-hover">
+
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Nombre Completo</th>
+        <th scope="col">Documento</th>
+        <th scope="col">Edad</th>
+        <th scope="col">Sexo</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let persona of personas">
+
+        <td>{{ persona.nombres }} {{ persona.apellidoPaterno }}</td>
+        <td>{{ persona.tipoDocumento }}: {{ persona.numeroDocumento }}</td>
+        <td>{{ persona.edad }}</td>
+        <td>{{ persona.sexo }}</td>
+
+        <td>
+          <button classs="btn btn-warning btn-sm me-2" title="Editar">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <button classs="btn btn-danger btn-sm" title="Eliminar">
+            <i class="bi bi-trash-fill"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="personas.length === 0 && !error">
+        <td colspan="5" class="text-center">
+          No hay personas registradas.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

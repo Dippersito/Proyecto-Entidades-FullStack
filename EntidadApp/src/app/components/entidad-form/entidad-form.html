@@ -1,0 +1,142 @@
+<h2>Formulario de Persona Natural</h2>
+<p>Complete los datos para registrar una nueva persona.</p>
+<hr>
+
+<form (ngSubmit)="onSubmit()" #personaForm="ngForm">
+
+  <div class="row g-3">
+    
+    <div class="col-md-4">
+      <label for="nombres" class="form-label">Nombres *</label>
+      <input type="text" 
+             class="form-control" 
+             id="nombres"
+             name="nombres"
+             [(ngModel)]="persona.nombres"
+             required>
+    </div>
+    
+    <div class="col-md-4">
+      <label for="apellidoPaterno" class="form-label">Apellido Paterno *</label>
+      <input type="text" 
+             class="form-control" 
+             id="apellidoPaterno"
+             name="apellidoPaterno"
+             [(ngModel)]="persona.apellidoPaterno"
+             required>
+    </div>
+    
+    <div class="col-md-4">
+      <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
+      <input type="text" 
+             class="form-control" 
+             id="apellidoMaterno"
+             name="apellidoMaterno"
+             [(ngModel)]="persona.apellidoMaterno">
+    </div>
+
+    <div class="col-md-3">
+      <label for="tipoDocumento" class="form-label">Tipo Documento *</label>
+      <select class="form-select" 
+              id="tipoDocumento"
+              name="tipoDocumento"
+              [(ngModel)]="persona.tipoDocumento"
+              required>
+        <option value="DNI">DNI</option>
+        <option value="Pasaporte">Pasaporte</option>
+        <option value="CE">Carnet de Extranjería</option>
+      </select>
+    </div>
+    
+    <div class="col-md-3">
+      <label for="numeroDocumento" class="form-label">Número Documento *</label>
+      <input type="text" 
+             class="form-control" 
+             id="numeroDocumento"
+             name="numeroDocumento"
+             [(ngModel)]="persona.numeroDocumento"
+             required>
+    </div>
+    
+    <div class="col-md-3">
+      <label for="fechaNacimiento" class="form-label">Fecha Nacimiento *</label>
+      <input type="date" 
+             class="form-control" 
+             id="fechaNacimiento"
+             name="fechaNacimiento"
+             [ngModel]="persona.fechaNacimiento | date:'yyyy-MM-dd'"
+             (ngModelChange)="persona.fechaNacimiento = $event"
+             required>
+    </div>
+
+    <div class="col-md-3">
+      <label for="sexo" class="form-label">Sexo</label>
+      <select class="form-select" 
+              id="sexo"
+              name="sexo"
+              [(ngModel)]="persona.sexo">
+        <option [ngValue]="undefined">Seleccionar...</option>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+      </select>
+    </div>
+
+  </div> <h4 class="mt-5">Teléfonos de Contacto</h4>
+  <hr>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+    <button type="button" 
+            class="btn btn-success btn-sm" 
+            (click)="agregarTelefono()">
+      <i class="bi bi-plus-circle me-2"></i>
+      Agregar Teléfono
+    </button>
+  </div>
+
+  <div *ngFor="let telefono of persona.telefonos; let i = index" class="row g-2 mb-2 align-items-center">
+    
+    <div class="col-auto">
+      <label class="form-label mb-0">Teléfono #{{ i + 1 }}:</label>
+    </div>
+
+    <div class="col">
+      <input type="text" 
+             class="form-control" 
+             [name]="'telefono' + i" 
+             [(ngModel)]="telefono.numero"
+             placeholder="Ej: 987654321"
+             required>
+    </div>
+    
+    <div class="col-auto">
+      <button type="button" 
+              class="btn btn-danger btn-sm" 
+              (click)="eliminarTelefono(i)"
+              title="Eliminar este teléfono">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="persona.telefonos.length === 0" class="alert alert-info">
+    No se han agregado teléfonos.
+  </div>
+
+
+  <hr class="mt-5">
+  <div class="d-flex justify-content-end gap-2">
+    
+    <button type="button" class="btn btn-secondary" routerLink="/">
+      <i class="bi bi-x-circle me-2"></i>
+      Cancelar
+    </button>
+    
+    <button type="submit" 
+            class="btn btn-primary" 
+            [disabled]="!personaForm.valid">
+      <i class="bi bi-save-fill me-2"></i>
+      Guardar Persona
+    </button>
+  </div>
+
+</form>

@@ -95,14 +95,13 @@ namespace EntidadApi.Data
         }
 
         // --- DELETE ---
-        public async Task<bool> EliminarEntidadAsync(int entidadId)
+        public async Task EliminarEntidadAsync(int entidadId)
         {
             var sql = "sp_EliminarEntidad";
             var param = new DynamicParameters();
             param.Add("@EntidadID", entidadId);
 
-            var filasAfectadas = await _dbConnection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
-            return filasAfectadas > 0;
+            await _dbConnection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
         }
 
         // --- READ (Por ID) ---

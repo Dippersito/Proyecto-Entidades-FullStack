@@ -16,7 +16,7 @@ namespace EntidadApi.Data
         Task ActualizarPersonaNaturalAsync(PersonaNatural persona);
 
         // DELETE
-        Task<bool> EliminarEntidadAsync(int entidadId);
+        Task EliminarEntidadAsync(int entidadId);
 
         Task<PersonaNatural?> GetPersonaNaturalByIdAsync(int entidadId);
     }

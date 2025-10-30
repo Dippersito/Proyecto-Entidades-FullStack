@@ -63,12 +63,7 @@ namespace EntidadApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarEntidad(int id)
         {
-            var resultado = await _repository.EliminarEntidadAsync(id);
-
-            if (!resultado)
-            {
-                return NotFound($"No se encontró la entidad con ID {id}.");
-            }
+            await _repository.EliminarEntidadAsync(id);
 
             return NoContent();
         }

@@ -1,0 +1,19 @@
+# --- .NET / Visual Studio ---
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.sln.docstates
+
+# --- Node.js / Angular ---
+node_modules/
+.angular/
+dist/
+npm-debug.log*
+*.log
+coverage/
+
+# --- macOS / Windows ---
+.DS_Store
+Thumbs.db

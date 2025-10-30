@@ -23,6 +23,19 @@ namespace EntidadApi.Controllers
             return Ok(personas);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPersonaNaturalById(int id)
+        {
+            var persona = await _repository.GetPersonaNaturalByIdAsync(id);
+
+            if (persona == null)
+            {
+                return NotFound($"No se encontró la entidad con ID {id}.");
+            }
+
+            return Ok(persona);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CrearPersonaNatural([FromBody] PersonaNatural persona)
         {
@@ -43,14 +56,7 @@ namespace EntidadApi.Controllers
             {
                 return BadRequest("El ID de la URL no coincide con el ID del cuerpo.");
             }
-
-            var resultado = await _repository.ActualizarPersonaNaturalAsync(persona);
-
-            if (!resultado)
-            {
-                return NotFound($"No se encontró la entidad con ID {id}.");
-            }
-
+            await _repository.ActualizarPersonaNaturalAsync(persona);
             return NoContent();
         }
 

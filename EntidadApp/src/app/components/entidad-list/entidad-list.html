@@ -35,10 +35,14 @@
         <td>{{ persona.sexo }}</td>
 
         <td>
-          <button classs="btn btn-warning btn-sm me-2" title="Editar">
+          <button class="btn btn-warning btn-sm me-2" 
+                  title="Editar"
+                  [routerLink]="['/personas/editar/', persona.entidadID]">
             <i class="bi bi-pencil-fill"></i>
           </button>
-          <button classs="btn btn-danger btn-sm" title="Eliminar">
+
+          <button class="btn btn-danger btn-sm" title="Eliminar"
+                  (click)="eliminarPersona(persona.entidadID)">
             <i class="bi bi-trash-fill"></i>
           </button>
         </td>

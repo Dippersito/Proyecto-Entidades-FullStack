@@ -21,7 +21,6 @@ namespace EntidadApi.Data
         {
             var sql = "sp_CrearPersonaNatural";
 
-            // 1. Mapear la lista de teléfonos a un DataTable
             var telefonosDt = new DataTable();
             telefonosDt.Columns.Add("Numero", typeof(string));
             foreach (var tel in persona.Telefonos)
@@ -29,7 +28,6 @@ namespace EntidadApi.Data
                 telefonosDt.Rows.Add(tel.Numero);
             }
 
-            // 2. Configurar los parámetros
             var param = new DynamicParameters();
             param.Add("@Nombres", persona.Nombres);
             param.Add("@ApellidoPaterno", persona.ApellidoPaterno);
@@ -41,10 +39,8 @@ namespace EntidadApi.Data
             param.Add("@Telefonos", telefonosDt.AsTableValuedParameter("dbo.TipoListaTelefono"));
             param.Add("@NuevoEntidadID", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-            // 3. Ejecutar
             await _dbConnection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
 
-            // 4. Obtener el ID de salida
             var nuevoId = param.Get<int>("@NuevoEntidadID");
             return nuevoId;
         }
@@ -56,13 +52,11 @@ namespace EntidadApi.Data
 
             using (var multipleResults = await _dbConnection.QueryMultipleAsync(sql, commandType: CommandType.StoredProcedure))
             {
-                // 1. Leer Personas
+
                 var personas = (await multipleResults.ReadAsync<PersonaNatural>()).ToList();
 
-                // 2. Leer Telefonos
                 var telefonos = (await multipleResults.ReadAsync<TelefonoContacto>()).ToList();
 
-                // 3. Unir los datos en C#
                 foreach (var persona in personas)
                 {
                     persona.Telefonos = telefonos
@@ -75,11 +69,10 @@ namespace EntidadApi.Data
         }
 
         // --- UPDATE ---
-        public async Task<bool> ActualizarPersonaNaturalAsync(PersonaNatural persona)
+        public async Task ActualizarPersonaNaturalAsync(PersonaNatural persona)
         {
             var sql = "sp_ActualizarPersonaNatural";
 
-            // 1. Mapear la lista de teléfonos a un DataTable
             var telefonosDt = new DataTable();
             telefonosDt.Columns.Add("Numero", typeof(string));
             foreach (var tel in persona.Telefonos)
@@ -87,7 +80,6 @@ namespace EntidadApi.Data
                 telefonosDt.Rows.Add(tel.Numero);
             }
 
-            // 2. Configurar los parámetros
             var param = new DynamicParameters();
             param.Add("@EntidadID", persona.EntidadID);
             param.Add("@Nombres", persona.Nombres);
@@ -99,11 +91,7 @@ namespace EntidadApi.Data
             param.Add("@Sexo", persona.Sexo);
             param.Add("@Telefonos", telefonosDt.AsTableValuedParameter("dbo.TipoListaTelefono"));
 
-            // 3. Ejecutar
-            var filasAfectadas = await _dbConnection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
-
-            // Devolver true si se actualizó algo
-            return filasAfectadas > 0;
+            await _dbConnection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
         }
 
         // --- DELETE ---
@@ -115,6 +103,30 @@ namespace EntidadApi.Data
 
             var filasAfectadas = await _dbConnection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
             return filasAfectadas > 0;
+        }
+
+        // --- READ (Por ID) ---
+        public async Task<PersonaNatural?> GetPersonaNaturalByIdAsync(int entidadId)
+        {
+            var sql = "sp_GetPersonaNaturalById";
+            var param = new DynamicParameters();
+            param.Add("@EntidadID", entidadId);
+
+            using (var multipleResults = await _dbConnection.QueryMultipleAsync(sql, param, commandType: CommandType.StoredProcedure))
+            {
+                var persona = await multipleResults.ReadFirstOrDefaultAsync<PersonaNatural>();
+
+                if (persona == null)
+                {
+                    return null; 
+                }
+
+                var telefonos = (await multipleResults.ReadAsync<TelefonoContacto>()).ToList();
+
+                persona.Telefonos = telefonos;
+
+                return persona;
+            }
         }
     }
 }

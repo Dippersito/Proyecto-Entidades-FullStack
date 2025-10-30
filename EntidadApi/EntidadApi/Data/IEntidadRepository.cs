@@ -13,9 +13,11 @@ namespace EntidadApi.Data
         Task<IEnumerable<PersonaNatural>> ListarPersonasNaturalesAsync();
 
         // UPDATE
-        Task<bool> ActualizarPersonaNaturalAsync(PersonaNatural persona);
+        Task ActualizarPersonaNaturalAsync(PersonaNatural persona);
 
         // DELETE
         Task<bool> EliminarEntidadAsync(int entidadId);
+
+        Task<PersonaNatural?> GetPersonaNaturalByIdAsync(int entidadId);
     }
 }

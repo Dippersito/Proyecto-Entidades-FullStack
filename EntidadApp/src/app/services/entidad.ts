@@ -16,6 +16,10 @@ export class EntidadService {
     return this.http.get<PersonaNatural[]>(this.apiUrl);
   }
 
+  getPersonaById(id: number): Observable<PersonaNatural> {
+    return this.http.get<PersonaNatural>(`${this.apiUrl}/${id}`);
+  }
+
   crearPersona(persona: PersonaNatural): Observable<PersonaNatural> {
     return this.http.post<PersonaNatural>(this.apiUrl, persona);
   }
